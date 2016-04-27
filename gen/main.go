@@ -10,7 +10,7 @@ import (
 )
 
 var pak = "testservice1"
-var wsdlFile = flag.String("w", `service2.wsdl`, "WSDL file with full path")
+var wsdlFile = flag.String("w", `service3.wsdl`, "WSDL file with full path")
 var xsdFile = flag.String("x", ``, "XSD file with full path")
 var packageName = flag.String("p", pak, "Package name")
 var outFile = flag.String("o", pak+"/webservice1.go", "Output file")
@@ -43,16 +43,16 @@ func main() {
 	buf, f := createOut(*outFile)
 	defer buf.Flush()
 	defer f.Close()
-	fmt.Printf("Import %+v\n", s.Import)
-	fmt.Println("-------------------------------------------------------------------------------------------", "\n")
-	fmt.Printf("Elements %+v\n", s.Elements)
-	fmt.Println("-------------------------------------------------------------------------------------------", "\n")
-	fmt.Printf("ComplexTypes %+v\n", s.ComplexTypes)
-	fmt.Println("-------------------------------------------------------------------------------------------", "\n")
+	//	fmt.Printf("Import %+v\n", s.Import)
+	//	fmt.Println("-------------------------------------------------------------------------------------------", "\n")
+	//	fmt.Printf("Elements %+v\n", s.Elements)
+	//	fmt.Println("-------------------------------------------------------------------------------------------", "\n")
+	//	fmt.Printf("ComplexTypes %+v\n", s.ComplexTypes)
+	//	fmt.Println("-------------------------------------------------------------------------------------------", "\n")
 	if s.Import.Namespace != "" && s.Import.SchemaLocation != "" {
 		url := s.Import.SchemaLocation
 		fmt.Println(url)
-		res := SchemaImport(url)
+		res := schemaImport(url)
 		xmlUnmarshal(res, &s)
 		//fmt.Printf("s %+v\n", s)
 	}
@@ -60,7 +60,7 @@ func main() {
 	create(&d, &s, buf, f)
 }
 
-func SchemaImport(wurl string) []byte {
+func schemaImport(wurl string) []byte {
 	req := chttplib.Get(wurl)
 	res, err := req.Bytes()
 	if err != nil {
