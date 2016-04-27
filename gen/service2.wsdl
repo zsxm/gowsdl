@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:wsp1_2="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://ws.service.creditease.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ws.service.creditease.com/" name="MessageServiceJaxbImplService">  
+  <types> 
+   
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ws.service.creditease.com/" version="1.0" targetNamespace="http://ws.service.creditease.com/">  
+  <xs:element name="batchCustomMessageSendJaxb" type="tns:batchCustomMessageSendJaxb"/>  
+  <xs:element name="batchCustomMessageSendJaxbResponse" type="tns:batchCustomMessageSendJaxbResponse"/>  
+  <xs:element name="batchOrderMsgSendJaxb" type="tns:batchOrderMsgSendJaxb"/>  
+  <xs:element name="batchOrderMsgSendJaxbResponse" type="tns:batchOrderMsgSendJaxbResponse"/>  
+  <xs:element name="orderMsgSendJaxb" type="tns:orderMsgSendJaxb"/>  
+  <xs:element name="orderMsgSendJaxbResponse" type="tns:orderMsgSendJaxbResponse"/>  
+  <xs:element name="queryModel" type="tns:queryModel"/>  
+  <xs:element name="queryModelResponse" type="tns:queryModelResponse"/>  
+  <xs:complexType name="batchOrderMsgSendJaxb"> 
+    <xs:sequence> 
+      <xs:element name="requestList" type="tns:messageReqJaxb" minOccurs="0"/> 
+    </xs:sequence> 
+  </xs:complexType>  
+  <xs:complexType name="messageReqJaxb"> 
+    <xs:sequence> 
+      <xs:element name="batchId" type="xs:string" minOccurs="0"/>  
+      <xs:element name="details" type="tns:detailsJaxb" nillable="true" minOccurs="0" maxOccurs="unbounded"/>  
+      <xs:element name="orgNo" type="xs:string" minOccurs="0"/>  
+      <xs:element name="typeNo" type="xs:string" minOccurs="0"/>  
+      <xs:element name="version" type="xs:string" minOccurs="0"/> 
+    </xs:sequence> 
+  </xs:complexType>  
+  <xs:complexType name="detailsJaxb"> 
+    <xs:sequence> 
+      <xs:element name="content" type="xs:string" minOccurs="0"/>  
+      <xs:element name="detailType" type="xs:string" minOccurs="0"/>  
+      <xs:element name="keywords" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>  
+      <xs:element name="mobile" type="xs:string" minOccurs="0"/>  
+      <xs:element name="priority" type="xs:string" minOccurs="0"/>  
+      <xs:element name="remark" type="xs:string" minOccurs="0"/>  
+      <xs:element name="sendTime" type="xs:string" minOccurs="0"/>  
+      <xs:element name="showNo" type="xs:string" minOccurs="0"/>  
+      <xs:element name="signInfo" type="xs:string" minOccurs="0"/> 
+    </xs:sequence> 
+  </xs:complexType>  
+  <xs:complexType name="batchOrderMsgSendJaxbResponse"> 
+    <xs:sequence> 
+      <xs:element name="return" type="tns:messageResJaxb" minOccurs="0"/> 
+    </xs:sequence> 
+  </xs:complexType>  
+  <xs:complexType name="messageResJaxb"> 
+    <xs:sequence> 
+      <xs:element name="batchId" type="xs:string" minOccurs="0"/>  
+      <xs:element name="orgNo" type="xs:string" minOccurs="0"/>  
+      <xs:element name="remark" type="xs:string" minOccurs="0"/>  
+      <xs:element name="retCode" type="xs:string" minOccurs="0"/>  
+      <xs:element name="retInfo" type="xs:string" minOccurs="0"/>  
+      <xs:element name="version" type="xs:string" minOccurs="0"/> 
+    </xs:sequence> 
+  </xs:complexType>  
+  <xs:complexType name="batchCustomMessageSendJaxb"> 
+    <xs:sequence> 
+      <xs:element name="requestList" type="tns:messageReqJaxb" minOccurs="0"/> 
+    </xs:sequence> 
+  </xs:complexType>  
+  <xs:complexType name="batchCustomMessageSendJaxbResponse"> 
+    <xs:sequence> 
+      <xs:element name="return" type="tns:messageResJaxb" minOccurs="0"/> 
+    </xs:sequence> 
+  </xs:complexType>  
+  <xs:complexType name="queryModel"> 
+    <xs:sequence> 
+      <xs:element name="arg0" type="xs:string" minOccurs="0"/>  
+      <xs:element name="arg1" type="xs:string" minOccurs="0"/>  
+      <xs:element name="arg2" type="xs:string" minOccurs="0"/> 
+    </xs:sequence> 
+  </xs:complexType>  
+  <xs:complexType name="queryModelResponse"> 
+    <xs:sequence> 
+      <xs:element name="return" type="tns:smsMessageModel" minOccurs="0" maxOccurs="unbounded"/> 
+    </xs:sequence> 
+  </xs:complexType>  
+  <xs:complexType name="smsMessageModel"> 
+    <xs:sequence> 
+      <xs:element name="modContext" type="xs:string" minOccurs="0"/>  
+      <xs:element name="modExplain" type="xs:string" minOccurs="0"/>  
+      <xs:element name="modId" type="xs:string" minOccurs="0"/>  
+      <xs:element name="modNumber" type="xs:string" minOccurs="0"/>  
+      <xs:element name="modState" type="xs:string" minOccurs="0"/>  
+      <xs:element name="modType" type="xs:string" minOccurs="0"/>  
+      <xs:element name="orgNo" type="xs:string" minOccurs="0"/>  
+      <xs:element name="passageway" type="xs:string" minOccurs="0"/>  
+      <xs:element name="smsRemark1" type="xs:string" minOccurs="0"/>  
+      <xs:element name="smsRemark2" type="xs:string" minOccurs="0"/>  
+      <xs:element name="smsRemark3" type="xs:string" minOccurs="0"/>  
+      <xs:element name="smsRemark4" type="xs:string" minOccurs="0"/>  
+      <xs:element name="smsRemark5" type="xs:string" minOccurs="0"/> 
+    </xs:sequence> 
+  </xs:complexType>  
+  <xs:complexType name="orderMsgSendJaxb"> 
+    <xs:sequence> 
+      <xs:element name="requestList" type="tns:messageReqJaxb" minOccurs="0"/> 
+    </xs:sequence> 
+  </xs:complexType>  
+  <xs:complexType name="orderMsgSendJaxbResponse"> 
+    <xs:sequence> 
+      <xs:element name="return" type="tns:messageResJaxb" minOccurs="0"/> 
+    </xs:sequence> 
+  </xs:complexType> 
+</xs:schema>
+
+  </types>  
+  <message name="orderMsgSendJaxb"> 
+    <part name="parameters" element="tns:orderMsgSendJaxb"/> 
+  </message>  
+  <message name="orderMsgSendJaxbResponse"> 
+    <part name="parameters" element="tns:orderMsgSendJaxbResponse"/> 
+  </message>  
+  <message name="batchOrderMsgSendJaxb"> 
+    <part name="parameters" element="tns:batchOrderMsgSendJaxb"/> 
+  </message>  
+  <message name="batchOrderMsgSendJaxbResponse"> 
+    <part name="parameters" element="tns:batchOrderMsgSendJaxbResponse"/> 
+  </message>  
+  <message name="batchCustomMessageSendJaxb"> 
+    <part name="parameters" element="tns:batchCustomMessageSendJaxb"/> 
+  </message>  
+  <message name="batchCustomMessageSendJaxbResponse"> 
+    <part name="parameters" element="tns:batchCustomMessageSendJaxbResponse"/> 
+  </message>  
+  <message name="queryModel"> 
+    <part name="parameters" element="tns:queryModel"/> 
+  </message>  
+  <message name="queryModelResponse"> 
+    <part name="parameters" element="tns:queryModelResponse"/> 
+  </message>  
+  <portType name="MessageService2.0"> 
+    <operation name="orderMsgSendJaxb"> 
+      <input wsam:Action="http://ws.service.creditease.com/MessageService2.0/orderMsgSendJaxbRequest" message="tns:orderMsgSendJaxb"/>  
+      <output wsam:Action="http://ws.service.creditease.com/MessageService2.0/orderMsgSendJaxbResponse" message="tns:orderMsgSendJaxbResponse"/> 
+    </operation>  
+    <operation name="batchOrderMsgSendJaxb"> 
+      <input wsam:Action="http://ws.service.creditease.com/MessageService2.0/batchOrderMsgSendJaxbRequest" message="tns:batchOrderMsgSendJaxb"/>  
+      <output wsam:Action="http://ws.service.creditease.com/MessageService2.0/batchOrderMsgSendJaxbResponse" message="tns:batchOrderMsgSendJaxbResponse"/> 
+    </operation>  
+    <operation name="batchCustomMessageSendJaxb"> 
+      <input wsam:Action="http://ws.service.creditease.com/MessageService2.0/batchCustomMessageSendJaxbRequest" message="tns:batchCustomMessageSendJaxb"/>  
+      <output wsam:Action="http://ws.service.creditease.com/MessageService2.0/batchCustomMessageSendJaxbResponse" message="tns:batchCustomMessageSendJaxbResponse"/> 
+    </operation>  
+    <operation name="queryModel"> 
+      <input wsam:Action="http://ws.service.creditease.com/MessageService2.0/queryModelRequest" message="tns:queryModel"/>  
+      <output wsam:Action="http://ws.service.creditease.com/MessageService2.0/queryModelResponse" message="tns:queryModelResponse"/> 
+    </operation> 
+  </portType>  
+  <binding name="MessageService2.0PortBinding" type="tns:MessageService2.0"> 
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>  
+    <operation name="orderMsgSendJaxb"> 
+      <soap:operation soapAction=""/>  
+      <input> 
+        <soap:body use="literal"/> 
+      </input>  
+      <output> 
+        <soap:body use="literal"/> 
+      </output> 
+    </operation>  
+    <operation name="batchOrderMsgSendJaxb"> 
+      <soap:operation soapAction=""/>  
+      <input> 
+        <soap:body use="literal"/> 
+      </input>  
+      <output> 
+        <soap:body use="literal"/> 
+      </output> 
+    </operation>  
+    <operation name="batchCustomMessageSendJaxb"> 
+      <soap:operation soapAction=""/>  
+      <input> 
+        <soap:body use="literal"/> 
+      </input>  
+      <output> 
+        <soap:body use="literal"/> 
+      </output> 
+    </operation>  
+    <operation name="queryModel"> 
+      <soap:operation soapAction=""/>  
+      <input> 
+        <soap:body use="literal"/> 
+      </input>  
+      <output> 
+        <soap:body use="literal"/> 
+      </output> 
+    </operation> 
+  </binding>  
+  <service name="MessageServiceJaxbImplService"> 
+    <port name="MessageService2.0Port" binding="tns:MessageService2.0PortBinding"> 
+      <soap:address location="http://118.244.192.173:8902/sms/services/MessageService2.0"/> 
+    </port> 
+  </service> 
+</definitions>
