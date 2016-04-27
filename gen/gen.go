@@ -23,6 +23,7 @@ type Method struct {
 	MessageOut   string
 	ParamInName  string
 	ParamOutName string
+	Params       []MessageParamIn
 }
 
 type Message struct {
@@ -119,6 +120,7 @@ func create(d *wsdl.Definitions, s *xsd.Schema, b *bufio.Writer, file *os.File) 
 	funcMap := template.FuncMap{
 		"StringHasValue": StringHasValue,
 		"TagDelimiter":   TagDelimiter,
+		"GT":             GT,
 	}
 
 	// create the template
@@ -190,15 +192,16 @@ func create(d *wsdl.Definitions, s *xsd.Schema, b *bufio.Writer, file *os.File) 
 			c = e.ComplexTypes
 		}
 
-		message := Message{}
-
+		reqMsg := Message{}
 		if c.Name != "" {
-			message.Name = exportableSymbol(c.Name)
-			message.XMLName = d.TargetNamespace + " " + c.Name
+			reqMsg.Name = exportableSymbol(c.Name)
+			reqMsg.XMLName = d.TargetNamespace + " " + c.Name
 		} else {
-			message.Name = exportableSymbol(e.Name)
-			message.XMLName = d.TargetNamespace + " " + e.Name
+			reqMsg.Name = exportableSymbol(e.Name)
+			reqMsg.XMLName = d.TargetNamespace + " " + e.Name
 		}
+		reqMsg.Action = m.Action
+		fmt.Println(m.Action)
 
 		if len(c.Sequence) > 0 {
 			si := strings.Index(c.Sequence[0].Type, ":")
@@ -209,13 +212,14 @@ func create(d *wsdl.Definitions, s *xsd.Schema, b *bufio.Writer, file *os.File) 
 				messageParam.ParamType = exportableSymbol(v.Type[si+1:])
 				messageParam.Input = true
 
-				message.Params = append(message.Params, messageParam)
+				reqMsg.Params = append(reqMsg.Params, messageParam)
+				m.Params = append(m.Params, messageParam)
 			}
-			data.Messages = append(data.Messages, message)
+			data.Messages = append(data.Messages, reqMsg)
 
 			m.InputType = exportableSymbol(c.Sequence[0].Type[si+1:])
-			m.MessageIn = message.Name
-			m.ParamInName = message.ParamName
+			m.MessageIn = reqMsg.Name
+			m.ParamInName = reqMsg.ParamName
 			m.HasParams = true
 		} else {
 			m.HasParams = false
@@ -223,26 +227,21 @@ func create(d *wsdl.Definitions, s *xsd.Schema, b *bufio.Writer, file *os.File) 
 
 		// find output parameter type
 		e = findElement(s, operation.Output.Message)
-
 		if e.ComplexTypes == nil {
 			c = findComplexType(s, e.Name)
 		} else {
 			c = e.ComplexTypes
 		}
-
 		si := strings.Index(c.Sequence[0].Type, ":")
 
-		message = Message{}
-
-		//message.Name = exportableSymbol(c.Name)
-		//message.XMLName = c.Name
+		resMsg := Message{}
 
 		if c.Name != "" {
-			message.Name = exportableSymbol(c.Name)
-			message.XMLName = c.Name
+			resMsg.Name = exportableSymbol(c.Name)
+			resMsg.XMLName = c.Name
 		} else {
-			message.Name = exportableSymbol(e.Name)
-			message.XMLName = e.Name
+			resMsg.Name = exportableSymbol(e.Name)
+			resMsg.XMLName = e.Name
 		}
 
 		for _, v := range c.Sequence {
@@ -251,25 +250,18 @@ func create(d *wsdl.Definitions, s *xsd.Schema, b *bufio.Writer, file *os.File) 
 			messageParam.XMLParamName = v.Name
 			messageParam.ParamType = exportableSymbol(v.Type[si+1:])
 			messageParam.Input = false
-			message.Params = append(message.Params, messageParam)
+			resMsg.Params = append(resMsg.Params, messageParam)
 		}
 
-		/*message.ParamName = exportableSymbol(c.Sequence[0].Name)
-		message.XMLParamName = c.Sequence[0].Name
-		message.ParamType = exportableSymbol(c.Sequence[0].Type[si+1:])
-		message.Input = false*/
-
-		data.Messages = append(data.Messages, message)
+		data.Messages = append(data.Messages, resMsg)
 
 		m.OutputType = exportableSymbol(c.Sequence[0].Type[si+1:])
-		m.MessageOut = message.Name
+		m.MessageOut = resMsg.Name
 		m.ParamOutName = exportableSymbol(c.Sequence[0].Name)
-
 		data.Methods = append(data.Methods, m)
+
 	}
 
-	// executa o template para geração do arquivo com
-	// o serviço que será consumido
 	err = tmpl.Execute(file, data)
 	if err != nil {
 		exit(err)
@@ -327,19 +319,33 @@ func decodeType(e xsd.Element) string {
 			return "bool"
 		case "decimal", "double":
 			return "float64"
+		case "int":
+			return "int"
+		case "long":
+			return "int64"
+		case "dateTime":
+			return "int"
 		default:
-			return "nil"
+			//return "nil"
+			return t[3:]
 		}
 	} else if t[0:2] == "s:" {
 		switch t[2:] {
 		case "string":
 			return "string"
-		case "boolean":
+		case "boolean", "bool":
 			return "bool"
 		case "decimal", "double":
 			return "float64"
+		case "int":
+			return "int"
+		case "long":
+			return "int64"
+		case "dateTime":
+			return "int"
 		default:
-			return "nil"
+			//return "nil"
+			return t[3:]
 		}
 	} else if t[0:3] == "tns" {
 		ty := exportableSymbol(t[4:])
@@ -360,4 +366,8 @@ func StringHasValue(s string) bool {
 
 func TagDelimiter() string {
 	return "`"
+}
+
+func GT(k1, k2 int) bool {
+	return k1 > k2
 }

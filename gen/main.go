@@ -9,11 +9,11 @@ import (
 	"github.com/zsxm/scgo/chttplib"
 )
 
-var pak = "testservice1"
-var wsdlFile = flag.String("w", `service3.wsdl`, "WSDL file with full path")
+var pak = "testservice2"
+var wsdlFile = flag.String("w", `service4.wsdl`, "WSDL file with full path")
 var xsdFile = flag.String("x", ``, "XSD file with full path")
 var packageName = flag.String("p", pak, "Package name")
-var outFile = flag.String("o", pak+"/webservice1.go", "Output file")
+var outFile = flag.String("o", pak+"/service.go", "Output file")
 
 // wsdl -w="C:\Temp\wsdl\CartaoEndpointService.wsdl" -x="C:\Temp\wsdl\CartaoEndpointService_schema1.xsd" -p="main" -o="C:\Temp\service.go"
 // wsdl -w="C:\Temp\wsdl\authendpointservice.wsdl" -x="C:\Temp\wsdl\AuthEndpointService_schema1.xsd" -p="login" -o="C:\Temp\auth_service.go"

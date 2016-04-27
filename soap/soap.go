@@ -17,7 +17,6 @@ func NewEnvelope() *Envelope {
 	se.XSI = "http://www.w3.org/2001/XMLSchema-instance"
 	se.XSD = "http://www.w3.org/2001/XMLSchema"
 	se.Soap = "http://schemas.xmlsoap.org/soap/envelope/"
-
 	return se
 }
 
