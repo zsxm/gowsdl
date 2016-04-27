@@ -19,7 +19,6 @@ var outFile = flag.String("o", pak+"/service.go", "Output file")
 // wsdl -w="C:\Temp\wsdl\authendpointservice.wsdl" -x="C:\Temp\wsdl\AuthEndpointService_schema1.xsd" -p="login" -o="C:\Temp\auth_service.go"
 func main() {
 	flag.Parse()
-
 	if *wsdlFile == "" || *packageName == "" || *outFile == "" {
 		flag.Usage()
 		return
@@ -52,15 +51,59 @@ func main() {
 	if s.Import.Namespace != "" && s.Import.SchemaLocation != "" {
 		url := s.Import.SchemaLocation
 		fmt.Println(url)
-		res := schemaImport(url)
+		res := wsdlServer(url)
 		xmlUnmarshal(res, &s)
 		//fmt.Printf("s %+v\n", s)
 	}
 	// create de service file
-	create(&d, &s, buf, f)
+	create(&d, &s, buf, f, *packageName)
 }
 
-func schemaImport(wurl string) []byte {
+//url
+func Get(wurl, packageName, outFile string) {
+	var d wsdl.Definitions
+	res := wsdlServer(wurl)
+	xmlUnmarshal(res, &d)
+	var s = d.Types.Schemas[0]
+	if s.Import.Namespace != "" && s.Import.SchemaLocation != "" {
+		wurl = s.Import.SchemaLocation
+		fmt.Println(wurl)
+		res := wsdlServer(wurl)
+		xmlUnmarshal(res, &s)
+	}
+	gen(d, s, outFile, packageName)
+}
+
+//file
+func File(wsdlFile, xsdFile, packageName, outFile string) {
+	if wsdlFile == "" || packageName == "" || outFile == "" {
+		exit(fmt.Errorf("%s", "wsdlFile or packageName or outFile is null"))
+	}
+	var d wsdl.Definitions
+	unmarshal(wsdlFile, &d)
+	var s xsd.Schema
+	if xsdFile != "" {
+		unmarshal(xsdFile, &s)
+	} else {
+		s = d.Types.Schemas[0]
+	}
+	if s.Import.Namespace != "" && s.Import.SchemaLocation != "" {
+		url := s.Import.SchemaLocation
+		fmt.Println(url)
+		res := wsdlServer(url)
+		xmlUnmarshal(res, &s)
+	}
+	gen(d, s, outFile, packageName)
+}
+
+func gen(d wsdl.Definitions, s xsd.Schema, packageName, outFile string) {
+	buf, f := createOut(outFile)
+	defer buf.Flush()
+	defer f.Close()
+	create(&d, &s, buf, f, packageName)
+}
+
+func wsdlServer(wurl string) []byte {
 	req := chttplib.Get(wurl)
 	res, err := req.Bytes()
 	if err != nil {

@@ -90,15 +90,11 @@ func xmlUnmarshal(b []byte, i interface{}) {
 }
 
 func createOut(n string) (*bufio.Writer, *os.File) {
-	// remove o arquivo de saida
 	err := os.Remove(n)
-	// verificar se houve, se houve erro e o erro não for do tipo "não existe"
-	// ignora o erro se retorna o erro em questão
 	if err != nil && !os.IsNotExist(err) {
 		exit(err)
 	}
 
-	// cria o arquivo de saída
 	f, err := os.Create(n)
 	if err != nil {
 		exit(err)
@@ -107,7 +103,6 @@ func createOut(n string) (*bufio.Writer, *os.File) {
 	return bufio.NewWriter(f), f
 }
 
-// exit sai da aplicação exibindo o erro se existir
 func exit(err error) {
 	if err != nil {
 		fmt.Println(err.Error())
@@ -115,8 +110,7 @@ func exit(err error) {
 	os.Exit(1)
 }
 
-// create cria o arquivo com o serviço a ser consumido
-func create(d *wsdl.Definitions, s *xsd.Schema, b *bufio.Writer, file *os.File) {
+func create(d *wsdl.Definitions, s *xsd.Schema, b *bufio.Writer, file *os.File, packageName string) {
 	funcMap := template.FuncMap{
 		"StringHasValue": StringHasValue,
 		"TagDelimiter":   TagDelimiter,
@@ -129,7 +123,7 @@ func create(d *wsdl.Definitions, s *xsd.Schema, b *bufio.Writer, file *os.File) 
 		exit(err)
 	}
 
-	data.PackageName = *packageName
+	data.PackageName = packageName
 	data.ServiceName = d.Service.Name
 	data.ServiceUrl = d.Service.Port.Address.Location
 	data.Methods = make([]Method, 0)
@@ -150,7 +144,6 @@ func create(d *wsdl.Definitions, s *xsd.Schema, b *bufio.Writer, file *os.File) 
 				Name:   exportableSymbol(s.ComplexTypes[i].Name),
 				Fields: make([]Field, 0),
 			}
-
 			if s.ComplexTypes[i].Content == nil {
 				for ii := 0; ii < len(s.ComplexTypes[i].Sequence); ii++ {
 					fi := Field{
