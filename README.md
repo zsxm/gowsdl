@@ -1,4 +1,5 @@
 # soap wsdl
+go webservice 接口客户端代码生成,基于 code.google.com/p/wsdl-go 修改<br/>
 web service 客户端代码生成, gen目录下 main.go配置wsdl url或文件目录，指定包名(目录名)和文件名，运行。</br>
 使用方式：<br/>
 var pak = "testservice1"<br/>
