@@ -18,19 +18,19 @@ import (<br/>
 )<br/>
 <br/>
 //测试用例
-`func TestService(t *testing.T) {<br/>
-	s := testservice1.NewMessageServiceJaxbImplService()<br/>
-	req := testservice1.MessageReqJaxb{}<br/>
-	req.OrgNo = "0000"<br/>
-	req.Version = "2.0"<br/>
-	req.TypeNo = "2000"<br/>
-	req.BatchId = "dslkfjlskdfjoqiwerua123f"<br/>
-	req.Details = append(req.Details, testservice1.DetailsJaxb{<br/>
-		Priority: "5",<br/>
-		Keywords: "comName|aaaa",<br/>
-		Mobile:   "1355555555",<br/>
-	})
-	res, err := s.OrderMsgSendJaxb(req)<br/>
-	fmt.Println(err)<br/>
-	fmt.Printf("%+v", res)<br/>
-}`<br/>
+`func TestService(t *testing.T) {`
+`	s := testservice1.NewMessageServiceJaxbImplService()`
+`	req := testservice1.MessageReqJaxb{}`
+`	req.OrgNo = "0000"`
+`	req.Version = "2.0"`
+`	req.TypeNo = "2000"`
+`	req.BatchId = "dslkfjlskdfjoqiwerua123f"`
+`	req.Details = append(req.Details, testservice1.DetailsJaxb{`
+`		Priority: "5",`
+`		Keywords: "comName|aaaa",`
+`		Mobile:   "1355555555",`
+`	})`
+`	res, err := s.OrderMsgSendJaxb(req)`
+`	fmt.Println(err)`
+`	fmt.Printf("%+v", res)`
+`}`
