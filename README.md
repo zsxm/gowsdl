@@ -17,20 +17,35 @@ import (<br/>
 	"github.com/zsxm/gowsdl/gen/testservice1"<br/>
 )<br/>
 <br/>
-//测试用例
+//测试用例<br/>
 `func TestService(t *testing.T) {`
+
 `	s := testservice1.NewMessageServiceJaxbImplService()`
+
 `	req := testservice1.MessageReqJaxb{}`
+
 `	req.OrgNo = "0000"`
+
 `	req.Version = "2.0"`
+
 `	req.TypeNo = "2000"`
+
 `	req.BatchId = "dslkfjlskdfjoqiwerua123f"`
+
 `	req.Details = append(req.Details, testservice1.DetailsJaxb{`
+
 `		Priority: "5",`
+
 `		Keywords: "comName|aaaa",`
+
 `		Mobile:   "1355555555",`
+
 `	})`
+
 `	res, err := s.OrderMsgSendJaxb(req)`
+
 `	fmt.Println(err)`
+
 `	fmt.Printf("%+v", res)`
+
 `}`
